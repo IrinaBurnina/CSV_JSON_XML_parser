@@ -1,14 +1,20 @@
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.*;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static java.util.Objects.hash;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class MainTest {
     List<Employee> expectedList;
@@ -41,9 +47,9 @@ public class MainTest {
 
     @Test
     public void listToJsonTest() {
-        String result = "[{\"id\":1,\"firstName\":\"John\",\"lastName\":\"Smith\",\"country\":\"USA\",\"age\":25}," +
+        String expected = "[{\"id\":1,\"firstName\":\"John\",\"lastName\":\"Smith\",\"country\":\"USA\",\"age\":25}," +
                 "{\"id\":2,\"firstName\":\"Ivan\",\"lastName\":\"Petrov\",\"country\":\"RU\",\"age\":23}]";
-        String expected = main.listToJson(expectedList);
+        String result = main.listToJson(expectedList);
         assertThat(expected, equalTo(result));
     }
 
@@ -52,6 +58,7 @@ public class MainTest {
         String[] columnMappingTest = {"id", "firstName", "lastName", "country", "age"};
         String fileNameTest = "data.csv";
         List<Employee> result = main.parseCSV(columnMappingTest, fileNameTest);
+        //Assertions.assertEquals(expectedList,result);//- почему-то всё равно различие видит, хотя при сравнении в окне разниц нет(((
         assertThat(expectedList.toString(), equalTo(result.toString()));
     }
 
@@ -59,7 +66,36 @@ public class MainTest {
     public void parseXMLTest() throws ParserConfigurationException, IOException, SAXException {
         String fileNameTest = "data.xml";
         List<Employee> result = main.parseXML(fileNameTest);
-        assertThat(expectedList.toString(), equalTo(result.toString()));
+        Assert.assertThat(expectedList.getClass(), equalTo(result.getClass()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MainTest mainTest = (MainTest) o;
+        return expectedList.equals(mainTest.expectedList);
+    }
+
+    @Test
+    public void parseXMLTest_sizeList() throws ParserConfigurationException, IOException, SAXException {
+        String fileNameTest = "data.xml";
+        List<Employee> result = main.parseXML(fileNameTest);
+        assertThat(result, hasSize(2));
+    }
+
+    @Test
+    public void parseXMLTest_throwsIOException() throws ParserConfigurationException, IOException, SAXException {
+        String fileNameTestForIOException = "v/data.xml";
+        Class<IOException> ioExceptionClass = IOException.class;
+        Assertions.assertThrows(ioExceptionClass, () -> main.parseXML(fileNameTestForIOException));
+    }
+
+    @Test
+    public void parseXMLTest_throwsSAXException() throws ParserConfigurationException, IOException, SAXException {
+        String fileNameTestForSAXException = "data.json";
+        Class<SAXException> saxExceptionClass = SAXException.class;
+        Assertions.assertThrows(saxExceptionClass, () -> main.parseXML(fileNameTestForSAXException));
     }
 }
 

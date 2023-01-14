@@ -28,7 +28,7 @@ public class Main {
         String json = listToJson(list);
         writeString(json, "data.json");
         System.out.println(json);
-        String jsonXML = listToJson(parseXML("data.xml"));
+        String jsonXML = listToJson(parseXML("dataForTestParseXML.xml"));
         writeString(jsonXML, "data2.json");
         System.out.println(jsonXML);
         json = readString("data.json");
