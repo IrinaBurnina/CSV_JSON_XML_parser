@@ -1,5 +1,3 @@
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.*;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -9,9 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static java.util.Objects.hash;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
@@ -69,13 +65,6 @@ public class MainTest {
         Assert.assertThat(expectedList.getClass(), equalTo(result.getClass()));
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MainTest mainTest = (MainTest) o;
-        return expectedList.equals(mainTest.expectedList);
-    }
 
     @Test
     public void parseXMLTest_sizeList() throws ParserConfigurationException, IOException, SAXException {
