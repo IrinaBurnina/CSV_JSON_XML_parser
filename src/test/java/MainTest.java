@@ -54,15 +54,14 @@ public class MainTest {
         String[] columnMappingTest = {"id", "firstName", "lastName", "country", "age"};
         String fileNameTest = "data.csv";
         List<Employee> result = main.parseCSV(columnMappingTest, fileNameTest);
-        //Assertions.assertEquals(expectedList,result);//- почему-то всё равно различие видит, хотя при сравнении в окне разниц нет(((
-        assertThat(expectedList.toString(), equalTo(result.toString()));
+        Assertions.assertEquals(expectedList, result);
     }
 
     @Test
     public void parseXMLTest() throws ParserConfigurationException, IOException, SAXException {
         String fileNameTest = "data.xml";
         List<Employee> result = main.parseXML(fileNameTest);
-        Assert.assertThat(expectedList.getClass(), equalTo(result.getClass()));
+        assertTrue(expectedList.equals(result));
     }
 
 
